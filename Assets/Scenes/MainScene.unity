@@ -282,6 +282,9 @@ MonoBehaviour:
   col: {fileID: 779357057}
   playerVisual: {fileID: 634778712}
   visualAnim: {fileID: 634778713}
+  blockedLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!65 &779357057
 BoxCollider:
   m_ObjectHideFlags: 0

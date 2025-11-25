@@ -10,6 +10,8 @@ public class PlayerMover : MonoBehaviour
     public GameObject playerVisual;
     public Animator visualAnim;
 
+    public LayerMask blockedLayer;
+
     int line;
     bool isJumping;
     bool isCrouching;
@@ -79,8 +81,18 @@ public class PlayerMover : MonoBehaviour
 
     void HandleHorizontalMove()
     {
+        //Debug.Log(Physics.BoxCast(transform.position + col.center, new Vector3(.2f, .3f, .1f), this.transform.forward * -1f, Quaternion.identity, .5f, blockedLayer));
+
         if (Input.GetKeyDown(KeyCode.D))
         {
+
+            
+            if(Physics.BoxCast(transform.position + col.center, new Vector3(.2f,.3f,.2f) , this.transform.forward * -1f , Quaternion.identity , .5f , blockedLayer))
+            {
+                
+                return;
+            }
+
             if(line < 1)
             {
                 targetPos.z -= 1f;
@@ -91,6 +103,12 @@ public class PlayerMover : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
+            if (Physics.BoxCast(transform.position + col.center, new Vector3(.2f, .3f, .2f), this.transform.forward * 1f, Quaternion.identity, .5f, blockedLayer))
+            {
+
+                return;
+            }
+
             if (line > -1)
             {
                 targetPos.z += 1f;
