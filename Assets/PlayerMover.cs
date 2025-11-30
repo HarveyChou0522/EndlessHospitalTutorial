@@ -12,9 +12,18 @@ public class PlayerMover : MonoBehaviour
 
     public LayerMask blockedLayer;
 
+    public AudioSource playerAudio;
+    public AudioClip runClip;
+    public AudioClip jumpClip;
+    public AudioClip slideClip;
+    public AudioClip deadClip;
+
+    public GameObject deadPanel;
+
     int line;
     bool isJumping;
     bool isCrouching;
+    bool isDead;
 
     Vector3 targetPos;
 
@@ -48,12 +57,21 @@ public class PlayerMover : MonoBehaviour
 
         visualAnim.SetTrigger("Jump");
 
+        playerAudio.clip = jumpClip;
+        playerAudio.loop = false;
+        playerAudio.Play();
+
         isJumping = true;
         
         col.center = new Vector3(col.center.x, 1, col.center.z);
         yield return new WaitForSeconds(.7f);
         //yield return new WaitUntil(() => spawner.mapMoveSpeed * Time.de);
         col.center = new Vector3(col.center.x, 0, col.center.z);
+
+        playerAudio.clip = runClip;
+        playerAudio.loop = true;
+        playerAudio.Play();
+
         isJumping = false;
     }
 
@@ -72,11 +90,19 @@ public class PlayerMover : MonoBehaviour
     {
         visualAnim.SetTrigger("Crouch");
 
+        playerAudio.clip = slideClip;
+        playerAudio.loop = false;
+        playerAudio.Play();
+
         col.center = new Vector3(col.center.x, -1, col.center.z);
         yield return new WaitForSeconds(.7f);
         
         col.center = new Vector3(col.center.x, 0, col.center.z);
-        
+
+        playerAudio.clip = runClip;
+        playerAudio.loop = true;
+        playerAudio.Play();
+
     }
 
     void HandleHorizontalMove()
@@ -86,7 +112,6 @@ public class PlayerMover : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D))
         {
 
-            
             if(Physics.BoxCast(transform.position + col.center, new Vector3(.2f,.3f,.2f) , this.transform.forward * -1f , Quaternion.identity , .5f , blockedLayer))
             {
                 
@@ -123,20 +148,28 @@ public class PlayerMover : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Pills"))
-        {
-            Destroy(other.gameObject);
-        }
-
         if (other.CompareTag("Obstacle"))
         {
             Debug.Log("Hit");
 
             //var mover = FindObjectsByType<MapMover>(FindObjectsSortMode.None);
-            MapSpawner.instance.StopMoveMap();
-            visualAnim.Play("Dead");
+            PlayerDead();
 
         }
+    }
+
+    public void PlayerDead()
+    {
+        if(!isDead) isDead = true;
+
+        MapSpawner.instance.StopMoveMap();
+        visualAnim.Play("Dead");
+
+        playerAudio.clip = deadClip;
+        playerAudio.loop = false;
+        playerAudio.Play();
+
+        deadPanel.SetActive(true);
     }
 
 
