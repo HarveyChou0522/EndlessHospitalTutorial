@@ -87,6 +87,10 @@ This project was for 2025-12 NTUT NPC Club Unity Courses. The code would be easy
 
 ## Credits
 BGM: https://assetstore.unity.com/packages/audio/music/free-horror-ambience-2-215651
+
+
 3D Assets - Horror Hopsital: https://assetstore.unity.com/packages/3d/environments/pbr-hospital-horror-pack-free-80117
+
+
 3D Assets - Pills: https://assetstore.unity.com/packages/3d/props/retro-psx-horror-healing-item-pack-icon-lowpoly-251611
 
